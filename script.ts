@@ -3,23 +3,34 @@ function getURLParameter(name: string): string | null {
 }
 
 const wordsContainer = document.getElementById('animated-words');
+const sentenceContainer = document.querySelector('.rotating-text > p:first-child') as HTMLElement;
 
 interface Word {
     text: string;
     color: string;
 }
 
+// Default sentence and words if no URL parameter is provided
+const defaultSentence = 'Add Sentence';
 const defaultWords: Word[] = [
-    { text: 'so cool.', color: 'alizarin' },
-    { text: 'gaming.', color: 'wisteria' },
+    { text: 'awesome.', color: 'alizarin' },
+    { text: 'beautiful.', color: 'wisteria' },
     { text: 'creative.', color: 'peter-river' },
     { text: 'fabulous.', color: 'emerald' },
     { text: 'interesting.', color: 'sun-flower' },
 ];
 
+// Fetch custom sentence and words from URL parameters
+let customSentenceParam = getURLParameter('sentence');
 let customWordsParam = getURLParameter('words');
+
+let customSentence = customSentenceParam ? customSentenceParam : defaultSentence;
 let customWords: Word[] = customWordsParam ? JSON.parse(customWordsParam) : defaultWords;
 
+// Set the custom sentence
+sentenceContainer.textContent = customSentence;
+
+// Add words to the DOM
 customWords.forEach(word => {
     let span = document.createElement('span');
     span.className = `word ${word.color}`;

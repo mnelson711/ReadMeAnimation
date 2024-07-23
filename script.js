@@ -2,15 +2,24 @@ function getURLParameter(name) {
     return new URLSearchParams(window.location.search).get(name);
 }
 var wordsContainer = document.getElementById('animated-words');
+var sentenceContainer = document.querySelector('.rotating-text > p:first-child');
+// Default sentence and words if no URL parameter is provided
+var defaultSentence = 'Add Sentence';
 var defaultWords = [
-    { text: 'so cool.', color: 'alizarin' },
-    { text: 'gaming.', color: 'wisteria' },
+    { text: 'awesome.', color: 'alizarin' },
+    { text: 'beautiful.', color: 'wisteria' },
     { text: 'creative.', color: 'peter-river' },
     { text: 'fabulous.', color: 'emerald' },
     { text: 'interesting.', color: 'sun-flower' },
 ];
+// Fetch custom sentence and words from URL parameters
+var customSentenceParam = getURLParameter('sentence');
 var customWordsParam = getURLParameter('words');
+var customSentence = customSentenceParam ? customSentenceParam : defaultSentence;
 var customWords = customWordsParam ? JSON.parse(customWordsParam) : defaultWords;
+// Set the custom sentence
+sentenceContainer.textContent = customSentence;
+// Add words to the DOM
 customWords.forEach(function (word) {
     var span = document.createElement('span');
     span.className = "word ".concat(word.color);
