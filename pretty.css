@@ -64,8 +64,13 @@ body {
 }
 
 .formbold-input-wrapp>div {
-    display: flex;
-    gap: 20px;
+    display: inline-block;
+    /* gap: 400px; */
+}
+
+.formbold-form-item {
+    float: left;
+    height: 40px;
 }
 
 .formbold-input-flex {
@@ -214,12 +219,38 @@ select.formbold-form-input,
     width: 45%;
 }
 
+
+
+.formbold-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    /* Space between items */
+}
+
+.formbold-form-item {
+    margin-right: 10px;
+    /* Space between label and input */
+}
+
 .remove-word-btn {
-    background-color: #e74c3c;
-    color: white;
-    margin-top: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #e74c3c;
+    padding: 0;
+    margin-left: 10px;
+    /* Adjust as needed */
 }
 
 .remove-word-btn:hover {
-    background-color: #c0392b;
+    color: #c0392b;
+}
+
+.remove-word-btn i,
+.remove-word-btn svg {
+    font-size: 18px;
+    /* Adjust icon size */
+    vertical-align: middle;
 }
