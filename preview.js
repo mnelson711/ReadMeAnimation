@@ -1,161 +1,121 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const sentenceParam = getURLParameter("sentence");
-  const wordsParam = getURLParameter("words");
+  let wordCount = 1;
 
-  if (sentenceParam && wordsParam) {
-    // Animation mode
-    document.getElementById("generator").style.display = "none";
-    document.getElementById("animation").style.display = "block";
+  // Function to add a new word input field
+  document.querySelector(".add-button").addEventListener("click", function () {
+    wordCount++;
+    addWordField(wordCount);
+    updateLabels(); // Update labels after adding a new word
+  });
 
-    const animationSentence = document.getElementById("animation-sentence");
-    const animationWordsContainer = document.getElementById("animation-words");
+  // Function to remove a word input field
+  window.removeWord = function (button) {
+    const wordDiv = button.parentElement;
+    wordDiv.remove();
+    updateLabels(); // Update labels after removing a word
+    updatePreview(); // Update the preview after removing a word
+  };
 
-    const words = JSON.parse(decodeURIComponent(wordsParam));
+  // Function to add a new word input field dynamically
+  function addWordField(count) {
+    const wordsContainer = document.createElement("div");
+    wordsContainer.className = "words-container";
+    wordsContainer.innerHTML = `
+            <label for="word-${count}" class="word-label">Word ${count}: </label>
+            <input type="text" id="word-${count}" name="word[]" class="word-input">
+            <input type="color" id="color-${count}" name="color[]" class="color-input">
+            <button type="button" class="del-button" onclick="removeWord(this)">
+                <i class="fa-solid fa-trash" style="color: #c10606;"></i>
+            </button>
+        `;
 
-    animationSentence.textContent = sentenceParam;
+    // Insert the new word-container before the add button
+    document
+      .querySelector(".add-button")
+      .insertAdjacentElement("beforebegin", wordsContainer);
 
-    words.forEach((word) => {
+    // Add event listeners for the new inputs to update the preview dynamically
+    wordsContainer
+      .querySelector(".word-input")
+      .addEventListener("input", updatePreview);
+    wordsContainer
+      .querySelector(".color-input")
+      .addEventListener("input", updatePreview);
+  }
+
+  // Function to update the labels to ensure they are in numeric order
+  function updateLabels() {
+    const wordLabels = document.querySelectorAll(".word-label");
+    wordLabels.forEach((label, index) => {
+      label.textContent = `Word ${index + 1}: `;
+    });
+  }
+
+  // Function to update the preview and generate Markdown
+  function updatePreview() {
+    const sentenceInput = document.getElementById("sentence").value;
+    const wordsInputs = document.getElementsByName("word[]");
+    const colorsInputs = document.getElementsByName("color[]");
+
+    const words = [];
+    const colors = [];
+
+    for (let i = 0; i < wordsInputs.length; i++) {
+      if (wordsInputs[i].value && colorsInputs[i].value) {
+        words.push(wordsInputs[i].value);
+        colors.push(colorsInputs[i].value);
+      }
+    }
+
+    const previewSentence = document.getElementById("preview-sentence");
+    const previewWordsContainer = document.getElementById("preview-words");
+
+    // Update the preview sentence
+    previewSentence.textContent = sentenceInput;
+
+    // Clear the current preview words
+    previewWordsContainer.innerHTML = "";
+
+    // Add new words to the preview
+    words.forEach((word, index) => {
       const span = document.createElement("span");
-      span.style.color = word.color;
-      word.text.split("").forEach((letter) => {
+      span.style.color = colors[index];
+      word.split("").forEach((letter) => {
         const letterSpan = document.createElement("span");
         letterSpan.textContent = letter;
         letterSpan.className = "letter";
         span.appendChild(letterSpan);
       });
-      animationWordsContainer.appendChild(span);
+      previewWordsContainer.appendChild(span);
     });
 
-    applyAnimation();
-  } else {
-    // Generator mode
-    document.getElementById("generator").style.display = "block";
-    document.getElementById("animation").style.display = "none";
-
-    let wordCount = 1;
-
-    document
-      .getElementById("add-word-btn")
-      .addEventListener("click", function () {
-        wordCount++;
-        const wordsContainer = document.getElementById("words-container");
-
-        const newWordDiv = document.createElement("div");
-        newWordDiv.className = "formbold-input-wrapp formbold-mb-3";
-
-        newWordDiv.innerHTML = `
-                <label for="word-${wordCount}" class="formbold-form-label"> Word ${wordCount} </label>
-                <input type="text" id="word-${wordCount}" name="word[]" class="formbold-form-input">
-                <label for="color-${wordCount}" class="formbold-form-label"> Color ${wordCount} </label>
-                <input type="color" id="color-${wordCount}" name="color[]" class="formbold-form-input-color">
-                <button type="button" class="formbold-btn remove-word-btn" onclick="removeWord(this)">Remove</button>
-            `;
-
-        wordsContainer.appendChild(newWordDiv);
-      });
-
-    document
-      .getElementById("generate-preview")
-      .addEventListener("click", function () {
-        const sentenceInput = document.getElementById("sentence").value;
-        const wordsInputs = document.getElementsByName("word[]");
-        const colorsInputs = document.getElementsByName("color[]");
-
-        const words = [];
-        const colors = [];
-
-        for (let i = 0; i < wordsInputs.length; i++) {
-          if (wordsInputs[i].value && colorsInputs[i].value) {
-            words.push(wordsInputs[i].value);
-            colors.push(colorsInputs[i].value);
-          }
-        }
-
-        const previewSentence = document.getElementById("preview-sentence");
-        const previewWordsContainer = document.getElementById("preview-words");
-
-        // Update the preview sentence
-        previewSentence.textContent = sentenceInput;
-
-        // Clear the current preview words
-        previewWordsContainer.innerHTML = "";
-
-        // Add new words to the preview
-        words.forEach((word, index) => {
-          const span = document.createElement("span");
-          span.style.color = colors[index];
-          word.split("").forEach((letter) => {
-            const letterSpan = document.createElement("span");
-            letterSpan.textContent = letter;
-            letterSpan.className = "letter";
-            span.appendChild(letterSpan);
-          });
-          previewWordsContainer.appendChild(span);
-        });
-
-        // Generate the Markdown link
-        const markdownLink = generateMarkdownLink(sentenceInput, words, colors);
-        document.getElementById("generated-markdown").value = markdownLink;
-
-        // Reapply animation
-        applyAnimation();
-      });
+    // Generate the Markdown link
+    const markdownLink = generateMarkdownLink(sentenceInput, words, colors);
+    document.getElementById("generated-markdown").value = markdownLink;
   }
-});
 
-function getURLParameter(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
+  // Function to generate Markdown link
+  function generateMarkdownLink(sentence, words, colors) {
+    const encodedSentence = encodeURIComponent(sentence);
+    const wordObjects = words.map((word, index) => {
+      return {
+        text: word,
+        color: colors[index] || "#000000", // Default to black if no color is set
+      };
+    });
+    const encodedWords = encodeURIComponent(JSON.stringify(wordObjects));
+    const baseUrl = window.location.origin + window.location.pathname;
+    return `![Rotating Text Animation](${baseUrl}?sentence=${encodedSentence}&words=${encodedWords})`;
+  }
 
-function removeWord(button) {
-  const wordDiv = button.parentElement;
-  wordDiv.remove();
-}
-
-function generateMarkdownLink(sentence, words, colors) {
-  const encodedSentence = encodeURIComponent(sentence);
-  const wordObjects = words.map((word, index) => {
-    return {
-      text: word,
-      color: colors[index] || "#000000", // Default to black if no color is set
-    };
+  // Event listeners for the initial input elements to update the preview dynamically
+  document.getElementById("sentence").addEventListener("input", updatePreview);
+  document.querySelectorAll(".word-input").forEach((input) => {
+    input.addEventListener("input", updatePreview);
   });
-  const encodedWords = encodeURIComponent(JSON.stringify(wordObjects));
-  const baseUrl = window.location.origin + window.location.pathname;
-  return `![Rotating Text Animation](${baseUrl}?sentence=${encodedSentence}&words=${encodedWords})`;
-}
+  document.querySelectorAll(".color-input").forEach((input) => {
+    input.addEventListener("input", updatePreview);
+  });
 
-function applyAnimation() {
-  const words = document.querySelectorAll(".word");
-  let currentWordIndex = 0;
-  const maxWordIndex = words.length - 1;
-  words[currentWordIndex].style.opacity = "1";
-
-  const rotateText = () => {
-    const currentWord = words[currentWordIndex];
-    const nextWord =
-      currentWordIndex === maxWordIndex
-        ? words[0]
-        : words[currentWordIndex + 1];
-
-    Array.prototype.slice.call(currentWord.children).forEach((letter, i) => {
-      setTimeout(() => {
-        letter.className = "letter out";
-      }, i * 80);
-    });
-
-    nextWord.style.opacity = "1";
-    Array.prototype.slice.call(nextWord.children).forEach((letter, i) => {
-      letter.className = "letter behind";
-      setTimeout(() => {
-        letter.className = "letter in";
-      }, 340 + i * 80);
-    });
-
-    currentWordIndex =
-      currentWordIndex === maxWordIndex ? 0 : currentWordIndex + 1;
-  };
-
-  rotateText();
-  setInterval(rotateText, 4000);
-}
+  updatePreview(); // Initial preview generation
+});

@@ -5,61 +5,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Animation Generator</title>
-    <link rel="stylesheet" href="pretty.css">
+    <link rel="stylesheet" href="test.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <script defer src="preview.js"></script>
 </head>
 
 <body>
-    <div class="formbold-main-wrapper">
-        <div class="formbold-form-wrapper" id="generator" style="display: none;">
-            <h1>Text Animation Generator</h1>
-
-            <form id="animation-form">
-                <div class="formbold-input-wrapp formbold-mb-3">
-                    <label for="sentence" class="formbold-form-label"> Enter Sentence </label>
-                    <input type="text" id="sentence" value="Programming with TypeScript is" class="formbold-form-input">
+    <div class="overall">
+        <div class="left-form-wrapper">
+            <h2>Customize Words</h2>
+            <hr class="solid">
+            <form>
+                <div class="sentence">
+                    <p>Enter Sentence</p>
+                    <!-- <label for="sentence" class="sentence-label"> Enter Sentence </label> -->
+                    <input type="text" id="sentence" value="Programming with TypeScript is" class="sentence-input">
                 </div>
 
-                <div id="words-container">
-                    <div class="formbold-input-wrapp formbold-mb-3 formbold-flex">
-                        <label for="word-1" class="formbold-form-item">Word 1</label>
-                        <input type="text" id="word-1" name="word[]" value="fun!" class="formbold-form-item">
-                        <input type="color" id="color-1" name="color[]" value="#2ecc71" class="formbold-form-item">
-                        <button type="button" class="formbold-btn remove-word-btn" onclick="removeWord(this)">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
+                <div class="words-container">
+                    <label for="word-1" class="word-label">Word 1: </label>
+                    <input type="text" id="word-1" name="word[]" value="fun!" class="word-input">
+                    <input type="color" id="color-1" name="color[]" value="#2ecc71" class="color-input">
+                    <button type="button" class="del-button" onclick="removeWord(this)">
+                        <i class="fa-solid fa-trash" style="color: #c10606;"></i>
+                    </button>
                 </div>
 
-                <button type="button" id="add-word-btn" class="formbold-btn">+ Add Word</button>
-                <button type="button" id="generate-preview" class="formbold-btn">Generate Preview</button>
+                <button type="button" id="add-button" class="add-button">+  Add  word</button>
+
+                <h2>Options</h2>
+                <hr class="solid">
+                <div class="options-container">
+                    <label for="word-1" class="option-label">Font: </label>
+                    <input type="text" id="word-1" name="word[]" value="fun!" class="option-input">
+                    <label for="word-1" class="option-label">Font-Size: </label>
+                    <input type="text" id="word-1" name="word[]" value="fun!" class="option-input">
+                    <label for="word-1" class="option-label">Background Color: </label>
+                    <input type="text" id="word-1" name="word[]" value="fun!" class="option-input">
+                </div>
             </form>
-
         </div>
 
-        <div class="formbold-form-wrapper" id="generator" style="display: none;">
+        <div class="right-preview-wrapper">
             <h2>Preview:</h2>
-            <div class="rotating-text">
+            <hr class="solid">
+            <div class="preview-container">
                 <p id="preview-sentence">Programming with TypeScript is</p>
                 <p id="preview-words"></p>
             </div>
-        
+            
             <h2>Generated Markdown:</h2>
-            <textarea id="generated-markdown" readonly class="formbold-form-input"></textarea>
+            <hr class="solid">
+            <textarea id="generated-markdown" readonly class="markdown-textarea"></textarea>
         </div>
+    </div> 
 
-
-
-
-        <div id="animation" style="display: none;">
-            <div class="rotating-text">
-                <p id="animation-sentence"></p>
-                <p id="animation-words"></p>
-            </div>
+    <div id="animation" style="display: none;">
+        <div class="rotating-text">
+            <p id="animation-sentence"></p>
+            <p id="animation-words"></p>
         </div>
     </div>
+
+
+
+
 </body>
 
 </html>

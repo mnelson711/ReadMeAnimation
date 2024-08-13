@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Animation Generator</title>
+    <link rel="stylesheet" href="pretty.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script defer src="preview.js"></script>
+</head>
+
+<body>
+    <div class="formbold-main-wrapper">
+        <div class="formbold-form-wrapper" id="generator" style="display: none;">
+            <h1>Text Animation Generator</h1>
+
+            <form id="animation-form">
+                <div class="formbold-input-wrapp formbold-mb-3">
+                    <label for="sentence" class="formbold-form-label"> Enter Sentence </label>
+                    <input type="text" id="sentence" value="Programming with TypeScript is" class="formbold-form-input">
+                </div>
+
+                <div id="words-container">
+                    <div class="formbold-input-wrapp formbold-mb-3 formbold-flex">
+                        <label for="word-1" class="formbold-form-item">Word 1</label>
+                        <input type="text" id="word-1" name="word[]" value="fun!" class="formbold-form-item">
+                        <input type="color" id="color-1" name="color[]" value="#2ecc71" class="formbold-form-item">
+                        <button type="button" class="formbold-btn remove-word-btn" onclick="removeWord(this)">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="button" id="add-word-btn" class="formbold-btn">+ Add Word</button>
+                <button type="button" id="generate-preview" class="formbold-btn">Generate Preview</button>
+            </form>
+
+        </div>
+
+        <div class="formbold-form-wrapper" id="generator" style="display: none;">
+            <h2>Preview:</h2>
+            <div class="rotating-text">
+                <p id="preview-sentence">Programming with TypeScript is</p>
+                <p id="preview-words"></p>
+            </div>
+        
+            <h2>Generated Markdown:</h2>
+            <textarea id="generated-markdown" readonly class="formbold-form-input"></textarea>
+        </div>
+
+
+
+
+        <div id="animation" style="display: none;">
+            <div class="rotating-text">
+                <p id="animation-sentence"></p>
+                <p id="animation-words"></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
