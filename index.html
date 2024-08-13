@@ -5,46 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Animation Generator</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pretty.css">
+    <script defer src="preview.js"></script>
 </head>
 
 <body>
-    <!-- This is the generator form container -->
-    <div id="generator" style="display: none;">
-        <h1>Text Animation Generator</h1>
+    <div class="formbold-main-wrapper">
+        <div class="formbold-form-wrapper">
+            <h1>Text Animation Generator</h1>
 
-        <div id="form-container">
-            <label for="sentence">Enter Sentence:</label>
-            <input type="text" id="sentence" value="Programming with TypeScript is">
+            <form id="animation-form">
+                <div class="formbold-input-wrapp formbold-mb-3">
+                    <label for="sentence" class="formbold-form-label"> Enter Sentence </label>
+                    <input type="text" id="sentence" value="Programming with TypeScript is" class="formbold-form-input">
+                </div>
 
-            <label for="words">Enter Words (comma-separated):</label>
-            <input type="text" id="words" value="fun!,powerful!,exciting!">
+                <div id="words-container">
+                    <div class="formbold-input-wrapp formbold-mb-3">
+                        <label for="word-1" class="formbold-form-label"> Word 1 </label>
+                        <input type="text" id="word-1" name="word[]" value="fun!" class="formbold-form-input">
+                        <label for="color-1" class="formbold-form-label"> Color 1 </label>
+                        <input type="color" id="color-1" name="color[]" value="#2ecc71" class="formbold-form-input-color">
+                        <button type="button" class="formbold-btn remove-word-btn"
+                            onclick="removeWord(this)">Remove</button>
+                    </div>
+                </div>
 
-            <label for="colors">Enter Colors (comma-separated):</label>
-            <input type="text" id="colors" value="emerald,peter-river,sun-flower">
+                <button type="button" id="add-word-btn" class="formbold-btn">Add Word</button>
+                <button type="button" id="generate-preview" class="formbold-btn">Generate Preview</button>
+            </form>
 
-            <button id="generate-preview">Generate Preview</button>
+            <h2>Preview:</h2>
+            <div class="rotating-text">
+                <p id="preview-sentence">Programming with TypeScript is</p>
+                <p id="preview-words"></p>
+            </div>
+
+            <h2>Generated Markdown:</h2>
+            <textarea id="generated-markdown" readonly class="formbold-form-input"></textarea>
         </div>
-
-        <h2>Preview:</h2>
-        <div class="rotating-text">
-            <p id="preview-sentence">Programming with TypeScript is</p>
-            <p id="preview-words"></p>
-        </div>
-
-        <h2>Generated Markdown:</h2>
-        <textarea id="generated-markdown" readonly></textarea>
     </div>
-
-    <!-- This is the animation container -->
-    <div id="animation" style="display: none;">
-        <div class="rotating-text">
-            <p id="animation-sentence"></p>
-            <p id="animation-words"></p>
-        </div>
-    </div>
-
-    <script src="preview.js"></script>
 </body>
 
 </html>

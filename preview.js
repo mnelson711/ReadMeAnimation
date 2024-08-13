@@ -1,45 +1,42 @@
-function getURLParameter(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
+document.addEventListener("DOMContentLoaded", function () {
+  let wordCount = 1;
 
-const sentenceParam = getURLParameter("sentence");
-const wordsParam = getURLParameter("words");
+  document
+    .getElementById("add-word-btn")
+    .addEventListener("click", function () {
+      wordCount++;
+      const wordsContainer = document.getElementById("words-container");
 
-if (sentenceParam && wordsParam) {
-  // Animation mode
-  document.getElementById("generator").style.display = "none";
-  document.getElementById("animation").style.display = "block";
+      const newWordDiv = document.createElement("div");
+      newWordDiv.className = "formbold-input-wrapp formbold-mb-3";
 
-  const animationSentence = document.getElementById("animation-sentence");
-  const animationWordsContainer = document.getElementById("animation-words");
+      newWordDiv.innerHTML = `
+            <label for="word-${wordCount}" class="formbold-form-label"> Word ${wordCount} </label>
+            <input type="text" id="word-${wordCount}" name="word[]" class="formbold-form-input">
+            <label for="color-${wordCount}" class="formbold-form-label"> Color ${wordCount} </label>
+            <input type="color" id="color-${wordCount}" name="color[]" class="formbold-form-input">
+            <button type="button" class="formbold-btn remove-word-btn" onclick="removeWord(this)">Remove</button>
+        `;
 
-  const words = JSON.parse(decodeURIComponent(wordsParam));
-
-  animationSentence.textContent = sentenceParam;
-
-  words.forEach((word) => {
-    const span = document.createElement("span");
-    span.className = `word ${word.color}`;
-    word.text.split("").forEach((letter) => {
-      const letterSpan = document.createElement("span");
-      letterSpan.textContent = letter;
-      letterSpan.className = "letter";
-      span.appendChild(letterSpan);
+      wordsContainer.appendChild(newWordDiv);
     });
-    animationWordsContainer.appendChild(span);
-  });
-
-  applyAnimation();
-} else {
-  // Generator mode
-  document.getElementById("generator").style.display = "block";
 
   document
     .getElementById("generate-preview")
     .addEventListener("click", function () {
       const sentenceInput = document.getElementById("sentence").value;
-      const wordsInput = document.getElementById("words").value.split(",");
-      const colorsInput = document.getElementById("colors").value.split(",");
+      const wordsInputs = document.getElementsByName("word[]");
+      const colorsInputs = document.getElementsByName("color[]");
+
+      const words = [];
+      const colors = [];
+
+      for (let i = 0; i < wordsInputs.length; i++) {
+        if (wordsInputs[i].value && colorsInputs[i].value) {
+          words.push(wordsInputs[i].value);
+          colors.push(colorsInputs[i].value);
+        }
+      }
 
       const previewSentence = document.getElementById("preview-sentence");
       const previewWordsContainer = document.getElementById("preview-words");
@@ -51,9 +48,9 @@ if (sentenceParam && wordsParam) {
       previewWordsContainer.innerHTML = "";
 
       // Add new words to the preview
-      wordsInput.forEach((word, index) => {
+      words.forEach((word, index) => {
         const span = document.createElement("span");
-        span.className = `word ${colorsInput[index] || "alizarin"}`;
+        span.style.color = colors[index];
         word.split("").forEach((letter) => {
           const letterSpan = document.createElement("span");
           letterSpan.textContent = letter;
@@ -64,16 +61,17 @@ if (sentenceParam && wordsParam) {
       });
 
       // Generate the Markdown link
-      const markdownLink = generateMarkdownLink(
-        sentenceInput,
-        wordsInput,
-        colorsInput
-      );
+      const markdownLink = generateMarkdownLink(sentenceInput, words, colors);
       document.getElementById("generated-markdown").value = markdownLink;
 
       // Reapply animation
       applyAnimation();
     });
+});
+
+function removeWord(button) {
+  const wordDiv = button.parentElement;
+  wordDiv.remove();
 }
 
 function generateMarkdownLink(sentence, words, colors) {
@@ -81,7 +79,7 @@ function generateMarkdownLink(sentence, words, colors) {
   const wordObjects = words.map((word, index) => {
     return {
       text: word,
-      color: colors[index] || "alizarin",
+      color: colors[index] || "#000000", // Default to black if no color is set
     };
   });
   const encodedWords = encodeURIComponent(JSON.stringify(wordObjects));
@@ -122,8 +120,4 @@ function applyAnimation() {
 
   rotateText();
   setInterval(rotateText, 4000);
-}
-
-if (!sentenceParam || !wordsParam) {
-  applyAnimation(); // Apply animation initially for the default preview
 }
