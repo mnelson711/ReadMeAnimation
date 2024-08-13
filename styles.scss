@@ -1,65 +1,36 @@
-@import url('https://fonts.googleapis.com/css?family=Lato:600');
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #222;
+#form-container {
+    margin-bottom: 20px;
 }
 
-.rotating-text {
-    font-family: 'Lato', sans-serif;
-    font-weight: 600;
-    font-size: 36px;
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+button {
+    display: block;
+    padding: 10px;
+    background-color: #3498db;
     color: white;
-
-    p {
-        display: inline-flex;
-        margin: 0;
-        vertical-align: top;
-
-        .word {
-            position: absolute;
-            display: flex;
-            opacity: 0;
-
-            .letter {
-                transform-origin: center center 25px;
-
-                &.out {
-                    transform: rotateX(90deg);
-                    transition: 0.32s cubic-bezier(0.6, 0, 0.7, 0.2);
-                }
-
-                &.in {
-                    transition: 0.38s ease;
-                }
-
-                &.behind {
-                    transform: rotateX(-90deg);
-                }
-            }
-        }
-    }
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-.alizarin {
-    color: #e74c3c;
+button:hover {
+    background-color: #2980b9;
 }
 
-.wisteria {
-    color: #8e44ad;
-}
-
-.peter-river {
-    color: #3498db;
-}
-
-.emerald {
-    color: #2ecc71;
-}
-
-.sun-flower {
-    color: #f1c40f;
+#generated-markdown {
+    width: 100%;
+    height: 80px;
+    margin-top: 10px;
+    font-family: monospace;
 }

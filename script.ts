@@ -11,7 +11,7 @@ interface Word {
 }
 
 // Default sentence and words if no URL parameter is provided
-const defaultSentence = 'Add Sentence';
+const defaultSentence = 'CSS Animation is';
 const defaultWords: Word[] = [
     { text: 'awesome.', color: 'alizarin' },
     { text: 'beautiful.', color: 'wisteria' },
@@ -52,14 +52,14 @@ let rotateText = () => {
     let currentWord = words[currentWordIndex];
     let nextWord = currentWordIndex === maxWordIndex ? words[0] : words[currentWordIndex + 1];
 
-    Array.from(currentWord.children).forEach((letter, i) => {
+    Array.prototype.slice.call(currentWord.children).forEach((letter, i) => {
         setTimeout(() => {
             letter.className = "letter out";
         }, i * 80);
     });
 
     (nextWord as HTMLElement).style.opacity = "1";
-    Array.from(nextWord.children).forEach((letter, i) => {
+    Array.prototype.slice.call(nextWord.children).forEach((letter, i) => {
         letter.className = "letter behind";
         setTimeout(() => {
             letter.className = "letter in";

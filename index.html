@@ -4,16 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Animation</title>
+    <title>Text Animation Generator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="rotating-text">
-        <p id="static-sentence">CSS Animation is</p>
-        <p id="animated-words"></p>
+    <!-- This is the generator form container -->
+    <div id="generator" style="display: none;">
+        <h1>Text Animation Generator</h1>
+
+        <div id="form-container">
+            <label for="sentence">Enter Sentence:</label>
+            <input type="text" id="sentence" value="Programming with TypeScript is">
+
+            <label for="words">Enter Words (comma-separated):</label>
+            <input type="text" id="words" value="fun!,powerful!,exciting!">
+
+            <label for="colors">Enter Colors (comma-separated):</label>
+            <input type="text" id="colors" value="emerald,peter-river,sun-flower">
+
+            <button id="generate-preview">Generate Preview</button>
+        </div>
+
+        <h2>Preview:</h2>
+        <div class="rotating-text">
+            <p id="preview-sentence">Programming with TypeScript is</p>
+            <p id="preview-words"></p>
+        </div>
+
+        <h2>Generated Markdown:</h2>
+        <textarea id="generated-markdown" readonly></textarea>
     </div>
-    <script src="script.js"></script>
+
+    <!-- This is the animation container -->
+    <div id="animation" style="display: none;">
+        <div class="rotating-text">
+            <p id="animation-sentence"></p>
+            <p id="animation-words"></p>
+        </div>
+    </div>
+
+    <script src="preview.js"></script>
 </body>
 
 </html>
