@@ -119,12 +119,34 @@ hr.solid {
 
 
 /* Animation Logic */
+.preview-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #bbb;
+}
+
+#animation-sentence {
+    margin-right: 6px;
+    white-space: nowrap;
+    display: inline-block;
+    padding-top: 2.1%;
+    /* vertical-align: middle; */
+}
+
+.rotating-text {
+    display: inline-flex;
+    position: relative;
+    white-space: nowrap;
+    /* vertical-align: middle; */
+}
 
 .word {
-    display: inline-block;
     position: absolute;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    /* vertical-align: middle; */
 }
 
 .letter {
