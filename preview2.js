@@ -255,6 +255,57 @@ document.addEventListener("DOMContentLoaded", function () {
       input.addEventListener("input", updatePreview);
     });
 
+      const sentenceColorPicker = document.getElementById(
+        "sentenceColorPicker"
+      );
+      const sentenceColorText = document.getElementById("sentenceColorText");
+
+      // Update the text input when the color picker changes
+      sentenceColorPicker.addEventListener("input", function () {
+        sentenceColorText.value = sentenceColorPicker.value.toUpperCase();
+      });
+
+      // Update the color picker when the text input changes
+      sentenceColorText.addEventListener("input", function () {
+        const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(
+          sentenceColorText.value
+        );
+        if (isValidHex) {
+          sentenceColorPicker.value = sentenceColorText.value;
+        }
+      });
+
+        const bgColorPicker = document.getElementById("bgColorPicker");
+        const bgColorText = document.getElementById("bgColorText");
+
+        // Update the text input when the color picker changes
+        bgColorPicker.addEventListener("input", function () {
+          bgColorText.value = bgColorPicker.value.toUpperCase();
+        });
+
+        // Update the color picker when the text input changes
+        bgColorText.addEventListener("input", function () {
+          const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(bgColorText.value);
+          if (isValidHex) {
+            bgColorPicker.value = bgColorText.value;
+          }
+        });
+
+      // Optional: Ensure valid input and format hex code correctly
+      colorText.addEventListener("blur", function () {
+        let color = colorText.value;
+        if (!color.startsWith("#")) {
+          color = "#" + color;
+        }
+        if (color.length === 4 || color.length === 7) {
+          colorText.value = color.toUpperCase();
+        } else {
+          // Reset to default if the input is invalid
+          colorText.value = colorPicker.value.toUpperCase();
+        }
+      });
+
+
     updatePreview(); // Initial preview generation
   }
 });

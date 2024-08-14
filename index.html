@@ -14,7 +14,7 @@
 <body>
     <div class="overall" id="generator">
         <div class="left-form-wrapper">
-            <h2>Customize Words</h2>
+            <p class="title">Customize Words</p>
             <hr class="solid">
             <form>
                 <div class="sentence">
@@ -34,28 +34,50 @@
 
                 <button type="button" id="add-button" class="add-button">+  Add  word</button>
 
-                <h2>Options</h2>
+                <p class="title">Options</p>
                 <hr class="solid">
                 <div class="options-container">
-                    <label for="word-1" class="option-label">Font: </label>
-                    <input type="text" id="word-1"  value="fun!" class="option-input">
-                    <label for="word-1" class="option-label">Font-Size: </label>
-                    <input type="text" id="word-1"  value="fun!" class="option-input">
-                    <label for="word-1" class="option-label">Background Color: </label>
-                    <input type="text" id="word-1"  value="fun!" class="option-input">
+                    <div class="form-group">
+                        <label for="font">Font:</label>
+                        <input type="text" class="option-input" id="font" name="font">
+                    </div>
+                    <div class="form-group">
+                        <label for="fontSize">Font Size:</label>
+                        <input type="number" class="option-input" id="fontSize" name="fontSize">
+                    </div>
+                    <div class="form-group">
+                        <label for="letterSpacing">Letter Spacing:</label>
+                        <input type="text" class="option-input" id="letterSpacing" name="letterSpacing">
+                    </div>
+                    <div class="form-group">
+                        <label for="color-input-group">Sentence Color:</label>
+                        <div class="color-input-group">
+                            <input type="text" id="sentenceColorText" class="color-text" placeholder="#000000">
+                            <input type="color" id="sentenceColorPicker" class="color-picker">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="color-input-group">Background Color:</label>
+                        <div class="color-input-group">
+                            <input type="text" id="bgColorText" class="color-text" placeholder="#000000">
+                            <input type="color" id="bgColorPicker" class="color-picker">
+
+                        </div>
+                    </div>
                 </div>
+
             </form>
         </div>
 
         <div class="right-preview-wrapper">
-            <h2>Preview:</h2>
+            <p class="title">Preview:</p>
             <hr class="solid">
             <div class="preview-container">
                 <p id="preview-sentence"></p>
                 <p id="preview-words"></p>
             </div>
         
-            <h2>Generated Markdowns:</h2>
+            <p class="title">Generated Markdowns:</p>
             <hr class="solid">
             <textarea id="generated-markdown" readonly class="markdown-textarea" placeholder="Generated prev"></textarea>
         </div>

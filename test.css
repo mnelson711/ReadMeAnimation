@@ -4,8 +4,12 @@
 
 .overall {
     display: flex;
-    padding: 10%;
+    padding-inline: 10%;
     gap: 5%;
+}
+
+.title {
+    font-size: 24px;
 }
 
 .left-form-wrapper {
@@ -13,6 +17,7 @@
     background-color: #e8e9f2;
     border-radius: 5px;
     padding: 2%;
+    /* width: 40%; */
 }
 
 .right-preview-wrapper {
@@ -103,6 +108,81 @@ hr.solid {
     cursor: pointer;
     margin-top: 2%;
 }
+
+
+/* Options Section */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Space between the form groups */
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+}
+
+.form-group label {
+    min-width: 150px;
+    /* Set a fixed or minimum width for the labels */
+    margin-right: 10px;
+    /* Space between the label and input */
+    text-align: left;
+    /* Align the label text to the right */
+}
+
+.option-input {
+    /* flex: 1; */
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    outline: none;
+    margin-left: 1%;
+    /* width: 30%; */
+    /* Allow the input to take up the remaining space */
+}
+
+/* .color-input-option {
+    width: 20%;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    height: 39px;
+    width: 7%;
+    transition: 0.3s;
+} */
+
+.color-input-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.color-picker {
+    padding-left: 1%;
+    border: none;
+    background: none;
+    background-color: white;
+    border: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 39px;
+    width: 12%;
+    transition: 0.3s;
+}
+
+.color-text {
+    /* width: 100px; */
+    text-transform: uppercase;
+    border: none;
+    padding: 12px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    outline: none;
+    /* width: 50%; */
+}
+
 
 /* Preview Section */
 
