@@ -113,4 +113,34 @@ hr.solid {
     outline: none;
     margin-left: 1%;
     width: 20%;
+    resize: none;
+}
+
+
+
+/* Animation Logic */
+
+.word {
+    display: inline-block;
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.letter {
+    display: inline-block;
+    transition: transform 0.5s ease;
+    transform-origin: 50% 50%;
+}
+
+.letter.in {
+    transform: rotateX(0deg);
+}
+
+.letter.out {
+    transform: rotateX(90deg);
+}
+
+.letter.behind {
+    transform: rotateX(-90deg);
 }

@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="test.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <script defer src="preview.js"></script>
+    <script defer src="preview2.js"></script>
 </head>
 
 <body>
-    <div class="overall">
+    <div class="overall" id="generator">
         <div class="left-form-wrapper">
             <h2>Customize Words</h2>
             <hr class="solid">
@@ -38,11 +38,11 @@
                 <hr class="solid">
                 <div class="options-container">
                     <label for="word-1" class="option-label">Font: </label>
-                    <input type="text" id="word-1" name="word[]" value="fun!" class="option-input">
+                    <input type="text" id="word-1"  value="fun!" class="option-input">
                     <label for="word-1" class="option-label">Font-Size: </label>
-                    <input type="text" id="word-1" name="word[]" value="fun!" class="option-input">
+                    <input type="text" id="word-1"  value="fun!" class="option-input">
                     <label for="word-1" class="option-label">Background Color: </label>
-                    <input type="text" id="word-1" name="word[]" value="fun!" class="option-input">
+                    <input type="text" id="word-1"  value="fun!" class="option-input">
                 </div>
             </form>
         </div>
@@ -51,25 +51,23 @@
             <h2>Preview:</h2>
             <hr class="solid">
             <div class="preview-container">
-                <p id="preview-sentence">Programming with TypeScript is</p>
+                <p id="preview-sentence"></p>
                 <p id="preview-words"></p>
             </div>
-            
-            <h2>Generated Markdown:</h2>
+        
+            <h2>Generated Markdowns:</h2>
             <hr class="solid">
-            <textarea id="generated-markdown" readonly class="markdown-textarea"></textarea>
+            <textarea id="generated-markdown" readonly class="markdown-textarea" placeholder="Generated prev"></textarea>
         </div>
-    </div> 
 
-    <div id="animation" style="display: none;">
-        <div class="rotating-text">
+    </div>
+
+    <div class="animation" id="animation" style="display:none;">
+        <div class="preview-container">
             <p id="animation-sentence"></p>
             <p id="animation-words"></p>
         </div>
     </div>
-
-
-
 
 </body>
 
