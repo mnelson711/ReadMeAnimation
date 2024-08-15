@@ -198,10 +198,16 @@ hr.solid {
     background-color: white;
 }
 
-
+#preview-container-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    /* background-color: #bbb; */
+}
 
 /* Animation Logic */
-.preview-container {
+#preview-container-animation {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -214,6 +220,7 @@ hr.solid {
     white-space: nowrap;
     display: inline-block;
     padding-top: 2.1%;
+    /* font-size: 30px; */
     /* vertical-align: middle; */
 }
 

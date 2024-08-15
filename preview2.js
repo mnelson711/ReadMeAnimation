@@ -46,20 +46,30 @@ document.addEventListener("DOMContentLoaded", function () {
     sentenceColor,
     bgColor,
   ) {
-    console.log(sentenceParam)
+    // console.log(sentenceParam)
     const words = JSON.parse(decodeURIComponent(wordsParam));
     const sentence = sentenceParam.replace(/%20/g, " ");
-    console.log(sentence);
+
+    const previewContainerAnimation = document.getElementById(
+    "preview-container-animation"
+    );
     const previewSentence = document.getElementById("animation-sentence");
     const previewWordsContainer = document.getElementById("animation-words");
 
+    // console.log("fontsize:", fontSize);
+
     // Update the animation sentence
+    let parsedFontSize = fontSize.toString() + "px";
     previewSentence.textContent = sentence;
     previewSentence.style.fontFamily = font || "inherit";
-    previewSentence.style.fontSize = fontSize || "inherit";
+    previewSentence.style.fontSize = parsedFontSize || "inherit";
     previewSentence.style.letterSpacing = letterSpacing || "inherit";
     previewSentence.style.color = sentenceColor || "#000000";
-    previewWordsContainer.style.backgroundColor = bgColor || "transparent";
+
+    previewContainerAnimation.style.backgroundColor = bgColor || "transparent";
+    // previewWordsContainer.style.fontFamily = font;
+
+    // console.log("fontsize:", parsedFontSize);
 
     // Clear the current animation words
     previewWordsContainer.innerHTML = "";
@@ -69,6 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const span = document.createElement("span");
       span.style.color = wordObj.color;
       span.className = "word";
+      span.style.fontFamily = font;
+      span.style.letterSpacing = letterSpacing;
       wordObj.text.split("").forEach((letter) => {
         const letterSpan = document.createElement("span");
         letterSpan.textContent = letter;
@@ -284,15 +296,19 @@ document.addEventListener("DOMContentLoaded", function () {
     ) {
       const previewSentence = document.getElementById("preview-sentence");
       const previewWordsContainer = document.getElementById("preview-words");
+      const previewContainerPreview = document.getElementById(
+        "preview-container-preview"
+      );
 
       // Update the preview sentence
+        let parsedFontSize = fontSize.toString() + "px";
         previewSentence.textContent = sentence;
         previewSentence.style.fontFamily = font || "inherit";
-        previewSentence.style.fontSize = fontSize || "inherit";
+        previewSentence.style.fontSize = parsedFontSize || "inherit";
         previewSentence.style.letterSpacing = letterSpacing || "inherit";
         previewSentence.style.color = sentenceColor || "#000000";
-        previewWordsContainer.style.backgroundColor =
-            bgColor || "transparent";
+        previewContainerPreview.style.backgroundColor =
+          bgColor || "transparent";
 
       // Clear the current preview words
       previewWordsContainer.innerHTML = "";
