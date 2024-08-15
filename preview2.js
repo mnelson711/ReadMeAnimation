@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const fontParam = urlParams.get("font");
     const fontSizeParam = urlParams.get("fontSize");
     const letterSpacingParam = urlParams.get("letterSpacing");
+    const intervalParam = urlParams.get("interval");
     const sentenceColorParam = urlParams.get("sentenceColor");
     const bgColorParam = urlParams.get("bgColor");
     console.log('sentence: ', sentenceParam);
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fontParam,
         fontSizeParam,
         letterSpacingParam,
+        intervalParam,
         sentenceColorParam,
         bgColorParam
     );
@@ -43,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     font,
     fontSize,
     letterSpacing,
+    interval,
     sentenceColor,
     bgColor,
   ) {
@@ -91,11 +94,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Apply the animation
-    applyAnimationToWords(previewWordsContainer.querySelectorAll(".word"));
+    applyAnimationToWords(previewWordsContainer.querySelectorAll(".word"), interval);
   }
 
   // Function to apply animation to the words in the animation-only view
-  function applyAnimationToWords(words) {
+  function applyAnimationToWords(words, interval) {
     let currentWordIndex = 0;
     const maxWordIndex = words.length - 1;
 
@@ -133,14 +136,14 @@ document.addEventListener("DOMContentLoaded", function () {
               letter.className = "letter in"; // Rotate in the letters of the next word
             }, i * 80);
           });
-        }, 500);
+        }, interval/8);
 
         currentWordIndex =
           currentWordIndex === maxWordIndex ? 0 : currentWordIndex + 1;
       };
 
       rotateText(); // Start the initial rotation
-      setInterval(rotateText, 4000); //TO UPDATE SPEED TODO
+      setInterval(rotateText, interval); //TO UPDATE SPEED TODO
     }
   }
 
@@ -165,11 +168,11 @@ document.addEventListener("DOMContentLoaded", function () {
       updatePreview(); // Update the preview after removing a word
     };
 
-    //copy clipboard button
+    //copy clipboard button markdown
     document
-      .getElementById("copyButton")
+      .getElementById("copyButtonMarkdown")
       .addEventListener("click", function () {
-        const textarea = document.getElementById("myTextarea");
+        const textarea = document.getElementById("generated-markdown");
         textarea.select();
         textarea.setSelectionRange(0, 99999); // For mobile devices
 
@@ -179,9 +182,22 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (err) {
           alert("Failed to copy text.");
         }
+      });
 
-        // Optional: Deselect the text after copying
-        window.getSelection().removeAllRanges();
+    //copy clipboard button html
+    document
+      .getElementById("copyButtonHTML")
+      .addEventListener("click", function () {
+        const textarea = document.getElementById("generated-html");
+        textarea.select();
+        textarea.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+          document.execCommand("copy");
+          alert("Text copied to clipboard!");
+        } catch (err) {
+          alert("Failed to copy text.");
+        }
       });
 
     // Function to add a new word input field dynamically
@@ -211,7 +227,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .addEventListener("input", updatePreview);
     }
 
-
     // Function to update the labels to ensure they are in numeric order
     function updateLabels() {
       const wordLabels = document.querySelectorAll(".word-label");
@@ -222,17 +237,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to update the preview and simulate URL call
     function updatePreview() {
-        const sentenceInput = document.getElementById("sentence").value;
-        const wordsInputs = document.getElementsByName("word[]");
-        const colorsInputs = document.getElementsByName("color[]");
-        const fontInput = document.getElementById("font").value;
-        const fontSizeInput = document.getElementById("fontSize").value;
-        const letterSpacingInput =
-            document.getElementById("letterSpacing").value;
-        const sentenceColorInput = document.getElementById(
-            "sentenceColorPicker"
-        ).value;
-        const bgColorInput = document.getElementById("bgColorPicker").value;
+      const sentenceInput = document.getElementById("sentence").value;
+      const wordsInputs = document.getElementsByName("word[]");
+      const colorsInputs = document.getElementsByName("color[]");
+      const fontInput = document.getElementById("font").value;
+      const fontSizeInput = document.getElementById("fontSize").value;
+      const letterSpacingInput = document.getElementById("letterSpacing").value;
+      const intervalInput = document.getElementById("interval").value;
+      const sentenceColorInput = document.getElementById(
+        "sentenceColorPicker"
+      ).value;
+      const bgColorInput = document.getElementById("bgColorPicker").value;
 
       if (
         !wordsInputs ||
@@ -262,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fontInput,
         fontSizeInput,
         letterSpacingInput,
+        intervalInput,
         sentenceColorInput,
         bgColorInput
       );
@@ -274,6 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fontInput,
         fontSizeInput,
         letterSpacingInput,
+        intervalInput,
         sentenceColorInput,
         bgColorInput
       );
@@ -291,6 +308,7 @@ document.addEventListener("DOMContentLoaded", function () {
       font,
       fontSize,
       letterSpacing,
+      interval,
       sentenceColor,
       bgColor
     ) {
@@ -301,14 +319,13 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       // Update the preview sentence
-        let parsedFontSize = fontSize.toString() + "px";
-        previewSentence.textContent = sentence;
-        previewSentence.style.fontFamily = font || "inherit";
-        previewSentence.style.fontSize = parsedFontSize || "inherit";
-        previewSentence.style.letterSpacing = letterSpacing || "inherit";
-        previewSentence.style.color = sentenceColor || "#000000";
-        previewContainerPreview.style.backgroundColor =
-          bgColor || "transparent";
+      let parsedFontSize = fontSize.toString() + "px";
+      previewSentence.textContent = sentence;
+      previewSentence.style.fontFamily = font || "inherit";
+      previewSentence.style.fontSize = parsedFontSize || "inherit";
+      previewSentence.style.letterSpacing = letterSpacing || "inherit";
+      previewSentence.style.color = sentenceColor || "#000000";
+      previewContainerPreview.style.backgroundColor = bgColor || "transparent";
 
       // Clear the current preview words
       previewWordsContainer.innerHTML = "";
@@ -328,7 +345,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       // Apply the animation
-      applyAnimationToWords(previewWordsContainer.querySelectorAll(".word"));
+      applyAnimationToWords(previewWordsContainer.querySelectorAll(".word"), interval);
     }
 
     // Function to generate the preview URL
@@ -339,6 +356,7 @@ document.addEventListener("DOMContentLoaded", function () {
       font,
       fontSize,
       letterSpacing,
+      interval,
       sentenceColor,
       bgColor
     ) {
@@ -352,13 +370,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const encodedWords = encodeURIComponent(JSON.stringify(wordObjects));
       const baseUrl = window.location.origin + window.location.pathname;
 
-      
       const params = new URLSearchParams({
         sentence: encodedSentence,
         words: encodedWords,
         font: font,
         fontSize: fontSize,
         letterSpacing: letterSpacing,
+        interval: interval,
         sentenceColor: sentenceColor,
         bgColor: bgColor,
       });
@@ -382,72 +400,68 @@ document.addEventListener("DOMContentLoaded", function () {
       input.addEventListener("input", updatePreview);
     });
 
+    document.getElementById("font").addEventListener("input", updatePreview);
     document
-        .getElementById("font")
-        .addEventListener("input", updatePreview);
+      .getElementById("fontSize")
+      .addEventListener("input", updatePreview);
     document
-        .getElementById("fontSize")
-        .addEventListener("input", updatePreview);
+      .getElementById("letterSpacing")
+      .addEventListener("input", updatePreview);
     document
-        .getElementById("letterSpacing")
-        .addEventListener("input", updatePreview);
+    .getElementById("interval")
+    .addEventListener("input", updatePreview);
     document
-        .getElementById("sentenceColorPicker")
-        .addEventListener("input", updatePreview);
+      .getElementById("sentenceColorPicker")
+      .addEventListener("input", updatePreview);
     document
-        .getElementById("bgColorPicker")
-        .addEventListener("input", updatePreview);
+      .getElementById("bgColorPicker")
+      .addEventListener("input", updatePreview);
 
-      const sentenceColorPicker = document.getElementById(
-        "sentenceColorPicker"
-      );
-      const sentenceColorText = document.getElementById("sentenceColorText");
+    const sentenceColorPicker = document.getElementById("sentenceColorPicker");
+    const sentenceColorText = document.getElementById("sentenceColorText");
 
-      // Update the text input when the color picker changes
-      sentenceColorPicker.addEventListener("input", function () {
-        sentenceColorText.value = sentenceColorPicker.value.toUpperCase();
-      });
+    // Update the text input when the color picker changes
+    sentenceColorPicker.addEventListener("input", function () {
+      sentenceColorText.value = sentenceColorPicker.value.toUpperCase();
+    });
 
-      // Update the color picker when the text input changes
-      sentenceColorText.addEventListener("input", function () {
-        const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(
-          sentenceColorText.value
-        );
-        if (isValidHex) {
-          sentenceColorPicker.value = sentenceColorText.value;
-        }
-      });
+    // Update the color picker when the text input changes
+    sentenceColorText.addEventListener("input", function () {
+      const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(sentenceColorText.value);
+      if (isValidHex) {
+        sentenceColorPicker.value = sentenceColorText.value;
+      }
+    });
 
-        const bgColorPicker = document.getElementById("bgColorPicker");
-        const bgColorText = document.getElementById("bgColorText");
+    const bgColorPicker = document.getElementById("bgColorPicker");
+    const bgColorText = document.getElementById("bgColorText");
 
-        // Update the text input when the color picker changes
-        bgColorPicker.addEventListener("input", function () {
-          bgColorText.value = bgColorPicker.value.toUpperCase();
-        });
+    // Update the text input when the color picker changes
+    bgColorPicker.addEventListener("input", function () {
+      bgColorText.value = bgColorPicker.value.toUpperCase();
+    });
 
-        // Update the color picker when the text input changes
-        bgColorText.addEventListener("input", function () {
-          const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(bgColorText.value);
-          if (isValidHex) {
-            bgColorPicker.value = bgColorText.value;
-          }
-        });
+    // Update the color picker when the text input changes
+    bgColorText.addEventListener("input", function () {
+      const isValidHex = /^#([0-9A-F]{3}){1,2}$/i.test(bgColorText.value);
+      if (isValidHex) {
+        bgColorPicker.value = bgColorText.value;
+      }
+    });
 
-      // Optional: Ensure valid input and format hex code correctly
-      colorText.addEventListener("blur", function () {
-        let color = colorText.value;
-        if (!color.startsWith("#")) {
-          color = "#" + color;
-        }
-        if (color.length === 4 || color.length === 7) {
-          colorText.value = color.toUpperCase();
-        } else {
-          // Reset to default if the input is invalid
-          colorText.value = colorPicker.value.toUpperCase();
-        }
-      });
-
+    // Optional: Ensure valid input and format hex code correctly
+    colorText.addEventListener("blur", function () {
+      let color = colorText.value;
+      if (!color.startsWith("#")) {
+        color = "#" + color;
+      }
+      if (color.length === 4 || color.length === 7) {
+        colorText.value = color.toUpperCase();
+      } else {
+        // Reset to default if the input is invalid
+        colorText.value = colorPicker.value.toUpperCase();
+      }
+    });
 
     updatePreview(); // Initial preview generation
   }

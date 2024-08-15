@@ -50,6 +50,10 @@
                         <input type="text" class="option-input" id="letterSpacing" name="letterSpacing">
                     </div>
                     <div class="form-group">
+                        <label for="interval">Interval:</label>
+                        <input type="text" class="option-input" id="interval" name="interval">
+                    </div>
+                    <div class="form-group">
                         <label for="color-input-group">Sentence Color:</label>
                         <div class="color-input-group">
                             <input type="text" id="sentenceColorText" class="color-text" placeholder="#000000">
@@ -77,10 +81,15 @@
                 <p id="preview-words"></p>
             </div>
         
-            <p class="title">Generated Markdowns:</p>
+            <p class="title">Markdown:</p>
             <hr class="solid">
-            <textarea id="generated-markdown" readonly class="markdown-textarea" placeholder="Generated prev"></textarea>
-            <button id="copyButton" class="add-button">Copy to Clipboard</button>
+            <textarea id="generated-markdown" readonly class="markdown-textarea" placeholder="Generated Markdown"></textarea>
+            <button id="copyButtonMarkdown" class="add-button">Copy to Clipboard</button>
+
+            <p class="title">HTML:</p>
+            <hr class="solid">
+            <textarea id="generated-html" readonly class="html-textarea" placeholder="Generated HTML"></textarea>
+            <button id="copyButtonHTML" class="add-button">Copy to Clipboard</button>
         </div>
 
     </div>

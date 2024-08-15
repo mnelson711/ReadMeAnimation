@@ -193,7 +193,19 @@ hr.solid {
     outline: none;
     /* margin-left: 1%; */
     width: 80%;
-    height: 40%;
+    height: 20%;
+    resize: none;
+    background-color: white;
+}
+
+.html-textarea {
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    outline: none;
+    /* margin-left: 1%; */
+    width: 80%;
+    height: 20%;
     resize: none;
     background-color: white;
 }
