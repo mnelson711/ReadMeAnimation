@@ -191,10 +191,11 @@ hr.solid {
     padding: 12px;
     border-radius: 5px;
     outline: none;
-    margin-left: 1%;
-    /* width: 20%; */
+    /* margin-left: 1%; */
+    width: 80%;
+    height: 40%;
     resize: none;
-    background-color: blue;
+    background-color: white;
 }
 
 

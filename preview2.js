@@ -153,6 +153,25 @@ document.addEventListener("DOMContentLoaded", function () {
       updatePreview(); // Update the preview after removing a word
     };
 
+    //copy clipboard button
+    document
+      .getElementById("copyButton")
+      .addEventListener("click", function () {
+        const textarea = document.getElementById("myTextarea");
+        textarea.select();
+        textarea.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+          document.execCommand("copy");
+          alert("Text copied to clipboard!");
+        } catch (err) {
+          alert("Failed to copy text.");
+        }
+
+        // Optional: Deselect the text after copying
+        window.getSelection().removeAllRanges();
+      });
+
     // Function to add a new word input field dynamically
     function addWordField(count) {
       const wordsContainer = document.createElement("div");
@@ -179,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .querySelector(".color-input")
         .addEventListener("input", updatePreview);
     }
+
 
     // Function to update the labels to ensure they are in numeric order
     function updateLabels() {
