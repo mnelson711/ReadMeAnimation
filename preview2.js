@@ -1,8 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Check for URL Parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const sentenceParam = urlParams.get("sentence");
-  const wordsParam = urlParams.get("words");
+    const urlParams = new URLSearchParams(window.location.search);
+    const sentenceParam = urlParams.get("sentence");
+    const wordsParam = urlParams.get("words");
+
+    const fontParam = urlParams.get("font");
+    const fontSizeParam = urlParams.get("fontSize");
+    const letterSpacingParam = urlParams.get("letterSpacing");
+    const sentenceColorParam = urlParams.get("sentenceColor");
+    const bgColorParam = urlParams.get("bgColor");
+    console.log('sentence: ', sentenceParam);
+    console.log("words: ", wordsParam);
 
   if (sentenceParam && wordsParam) {
     // If parameters are present, handle the animation-only view
@@ -10,7 +18,15 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("generator").style.display = "none";
     document.getElementById("animation").style.display = "block";
 
-    loadAnimationFromURL(sentenceParam, wordsParam);
+    loadAnimationFromURL(
+        sentenceParam,
+        wordsParam,
+        fontParam,
+        fontSizeParam,
+        letterSpacingParam,
+        sentenceColorParam,
+        bgColorParam
+    );
   } else {
     // Otherwise, show the full form for customization
     console.log("No params detected. Showing generator form.");
@@ -21,15 +37,29 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to load and apply the animation from the URL parameters
-  function loadAnimationFromURL(sentence, wordsParam) {
+  function loadAnimationFromURL(
+    sentenceParam,
+    wordsParam,
+    font,
+    fontSize,
+    letterSpacing,
+    sentenceColor,
+    bgColor,
+  ) {
+    console.log(sentenceParam)
     const words = JSON.parse(decodeURIComponent(wordsParam));
-
+    const sentence = sentenceParam.replace(/%20/g, " ");
+    console.log(sentence);
     const previewSentence = document.getElementById("animation-sentence");
     const previewWordsContainer = document.getElementById("animation-words");
 
     // Update the animation sentence
     previewSentence.textContent = sentence;
-    console.log(previewSentence.textContent);
+    previewSentence.style.fontFamily = font || "inherit";
+    previewSentence.style.fontSize = fontSize || "inherit";
+    previewSentence.style.letterSpacing = letterSpacing || "inherit";
+    previewSentence.style.color = sentenceColor || "#000000";
+    previewWordsContainer.style.backgroundColor = bgColor || "transparent";
 
     // Clear the current animation words
     previewWordsContainer.innerHTML = "";
@@ -98,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       rotateText(); // Start the initial rotation
-      setInterval(rotateText, 4000); // Continue rotating every 4 seconds
+      setInterval(rotateText, 4000); //TO UPDATE SPEED TODO
     }
   }
 
@@ -160,9 +190,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to update the preview and simulate URL call
     function updatePreview() {
-      const sentenceInput = document.getElementById("sentence").value;
-      const wordsInputs = document.getElementsByName("word[]");
-      const colorsInputs = document.getElementsByName("color[]");
+        const sentenceInput = document.getElementById("sentence").value;
+        const wordsInputs = document.getElementsByName("word[]");
+        const colorsInputs = document.getElementsByName("color[]");
+        const fontInput = document.getElementById("font").value;
+        const fontSizeInput = document.getElementById("fontSize").value;
+        const letterSpacingInput =
+            document.getElementById("letterSpacing").value;
+        const sentenceColorInput = document.getElementById(
+            "sentenceColorPicker"
+        ).value;
+        const bgColorInput = document.getElementById("bgColorPicker").value;
 
       if (
         !wordsInputs ||
@@ -185,10 +223,28 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Generate the URL with the current parameters
-      const url = generatePreviewURL(sentenceInput, words, colors);
+      const url = generatePreviewURL(
+        sentenceInput,
+        words,
+        colors,
+        fontInput,
+        fontSizeInput,
+        letterSpacingInput,
+        sentenceColorInput,
+        bgColorInput
+      );
 
       // Simulate loading the URL within the preview area
-      loadPreviewFromForm(sentenceInput, words, colors);
+      loadPreviewFromForm(
+        sentenceInput,
+        words,
+        colors,
+        fontInput,
+        fontSizeInput,
+        letterSpacingInput,
+        sentenceColorInput,
+        bgColorInput
+      );
 
       // Update the generated Markdown link
       const markdownLink = generateMarkdownLink(url);
@@ -196,12 +252,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to load and apply the preview from the form inputs
-    function loadPreviewFromForm(sentence, words, colors) {
+    function loadPreviewFromForm(
+      sentence,
+      words,
+      colors,
+      font,
+      fontSize,
+      letterSpacing,
+      sentenceColor,
+      bgColor
+    ) {
       const previewSentence = document.getElementById("preview-sentence");
       const previewWordsContainer = document.getElementById("preview-words");
 
       // Update the preview sentence
-      previewSentence.textContent = sentence;
+        previewSentence.textContent = sentence;
+        previewSentence.style.fontFamily = font || "inherit";
+        previewSentence.style.fontSize = fontSize || "inherit";
+        previewSentence.style.letterSpacing = letterSpacing || "inherit";
+        previewSentence.style.color = sentenceColor || "#000000";
+        previewWordsContainer.style.backgroundColor =
+            bgColor || "transparent";
 
       // Clear the current preview words
       previewWordsContainer.innerHTML = "";
@@ -225,7 +296,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to generate the preview URL
-    function generatePreviewURL(sentence, words, colors) {
+    function generatePreviewURL(
+      sentence,
+      words,
+      colors,
+      font,
+      fontSize,
+      letterSpacing,
+      sentenceColor,
+      bgColor
+    ) {
       const encodedSentence = encodeURIComponent(sentence);
       const wordObjects = words.map((word, index) => {
         return {
@@ -236,7 +316,18 @@ document.addEventListener("DOMContentLoaded", function () {
       const encodedWords = encodeURIComponent(JSON.stringify(wordObjects));
       const baseUrl = window.location.origin + window.location.pathname;
 
-      return `${baseUrl}?sentence=${encodedSentence}&words=${encodedWords}`;
+      
+      const params = new URLSearchParams({
+        sentence: encodedSentence,
+        words: encodedWords,
+        font: font,
+        fontSize: fontSize,
+        letterSpacing: letterSpacing,
+        sentenceColor: sentenceColor,
+        bgColor: bgColor,
+      });
+
+      return `${baseUrl}?${params.toString()}`;
     }
 
     // Function to generate Markdown link
@@ -254,6 +345,22 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".color-input").forEach((input) => {
       input.addEventListener("input", updatePreview);
     });
+
+    document
+        .getElementById("font")
+        .addEventListener("input", updatePreview);
+    document
+        .getElementById("fontSize")
+        .addEventListener("input", updatePreview);
+    document
+        .getElementById("letterSpacing")
+        .addEventListener("input", updatePreview);
+    document
+        .getElementById("sentenceColorPicker")
+        .addEventListener("input", updatePreview);
+    document
+        .getElementById("bgColorPicker")
+        .addEventListener("input", updatePreview);
 
       const sentenceColorPicker = document.getElementById(
         "sentenceColorPicker"

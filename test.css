@@ -192,8 +192,9 @@ hr.solid {
     border-radius: 5px;
     outline: none;
     margin-left: 1%;
-    width: 20%;
+    /* width: 20%; */
     resize: none;
+    background-color: blue;
 }
 
 
@@ -203,8 +204,8 @@ hr.solid {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    background-color: #bbb;
+    height: 100px;
+    /* background-color: #bbb; */
 }
 
 #animation-sentence {
