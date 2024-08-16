@@ -441,16 +441,34 @@ document.addEventListener("DOMContentLoaded", function () {
       .addEventListener("click", function () {
         wordCount++;
         addWordField("", "#FFFFFF");
-        updateLabels(); // Update labels after adding a new word
+        reorderWordLabels(); // Update labels after adding a new word
       });
 
     // Function to remove a word input field
     window.removeWord = function (button) {
       const wordDiv = button.parentElement;
       wordDiv.remove();
-      updateLabels(); // Update labels after removing a word
+      reorderWordLabels();
       updatePreview(); // Update the preview after removing a word
     };
+
+    function reorderWordLabels() {
+      // Select all remaining word containers
+      const wordContainers = document.querySelectorAll(".words-container");
+
+      wordContainers.forEach((container, index) => {
+        // Update the label text to reflect the correct word number
+        const label = container.querySelector(".word-label");
+        label.textContent = `Word ${index + 1}: `;
+
+        // Update the IDs of the input fields and their associated labels
+        const wordInput = container.querySelector(".word-input");
+        const colorInput = container.querySelector(".color-input");
+
+        wordInput.id = `word-${index + 1}`;
+        colorInput.id = `color-${index + 1}`;
+      });
+    }
 
     //copy clipboard button markdown
     document
@@ -530,7 +548,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document
     .getElementById("bgColorText")
     .addEventListener("input", updatePreview);
-    
+
     const sentenceColorPicker = document.getElementById("sentenceColorPicker");
     const sentenceColorText = document.getElementById("sentenceColorText");
 
