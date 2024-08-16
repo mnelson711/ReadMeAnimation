@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const fontSizeParam = urlParams.get("fontSize");
     const letterSpacingParam = urlParams.get("letterSpacing");
     const intervalParam = urlParams.get("interval");
+    const widthParam = urlParams.get("width");
+    const heightParam = urlParams.get("height");
+    
     const sentenceColorParam = urlParams.get("sentenceColor");
     const bgColorParam = urlParams.get("bgColor");
     console.log('sentence: ', sentenceParam);
@@ -26,11 +29,291 @@ document.addEventListener("DOMContentLoaded", function () {
         fontSizeParam,
         letterSpacingParam,
         intervalParam,
+        widthParam,
+        heightParam,
         sentenceColorParam,
         bgColorParam
     );
   } else {
     // Otherwise, show the full form for customization
+
+    //default values:
+
+    const defaultParams = {
+      sentence: "Coding is super ",
+      words: ["Cool", "Awesome", "Amazing"],
+      colors: ["#FF0000", "#00FF00", "#DE12B8"],
+      font: "Arial",
+      fontSize: "24",
+      letterSpacing: "2px",
+      interval: 4000,
+      sentenceColor: "#DE12B8",
+      bgColor: "#FFFFFF",
+      height: "300",
+      width: "600",
+    };
+
+    const {
+      sentence,
+      words,
+      colors,
+      font,
+      fontSize,
+      letterSpacing,
+      interval,
+      sentenceColor,
+      bgColor,
+      height,
+      width,
+    } = defaultParams;
+
+    // Set default values for text areas and inputs
+    document.getElementById("sentence").value = sentence;
+
+    // Function to load and apply the preview from the form inputs
+    function loadPreviewFromForm(
+      sentence,
+      words,
+      colors,
+      font,
+      fontSize,
+      letterSpacing,
+      interval,
+      width,
+      height,
+      sentenceColor,
+      bgColor
+    ) {
+      const previewSentence = document.getElementById("preview-sentence");
+      const previewWordsContainer = document.getElementById("preview-words");
+      const previewContainerPreview = document.getElementById(
+        "preview-container-preview"
+      );
+
+      // Update the preview sentence
+      let parsedFontSize = fontSize.toString() + "px";
+      previewSentence.textContent = sentence;
+      previewSentence.style.fontFamily = font || "inherit";
+      previewSentence.style.fontSize = parsedFontSize || "inherit";
+      previewSentence.style.letterSpacing = letterSpacing || "inherit";
+      previewSentence.style.color = sentenceColor || "#000000";
+
+      previewContainerPreview.style.backgroundColor = bgColor || "transparent";
+      previewContainerPreview.style.height = height ? `${height}px` : "auto";
+      previewContainerPreview.style.width = width ? `${width}px` : "auto";
+
+      // Clear the current preview words
+      previewWordsContainer.innerHTML = "";
+
+      // Add new words to the preview with animation
+      words.forEach((word, index) => {
+        const span = document.createElement("span");
+        span.style.color = colors[index];
+        span.className = "word";
+        word.split("").forEach((letter) => {
+          const letterSpan = document.createElement("span");
+          letterSpan.textContent = letter;
+          letterSpan.className = "letter";
+          span.appendChild(letterSpan);
+        });
+        previewWordsContainer.appendChild(span);
+      });
+
+      // Apply the animation
+      applyAnimationToWords(
+        previewWordsContainer.querySelectorAll(".word"),
+        interval
+      );
+    }
+
+    // Function to generate the preview URL
+    function generatePreviewURL(
+      sentence,
+      words,
+      colors,
+      font,
+      fontSize,
+      letterSpacing,
+      interval,
+      width,
+      height,
+      sentenceColor,
+      bgColor
+    ) {
+      const encodedSentence = encodeURIComponent(sentence);
+      const wordObjects = words.map((word, index) => {
+        return {
+          text: word,
+          color: colors[index] || "#000000", // Default to black if no color is set
+        };
+      });
+      const encodedWords = encodeURIComponent(JSON.stringify(wordObjects));
+      const baseUrl = window.location.origin + window.location.pathname;
+
+      const params = new URLSearchParams({
+        sentence: encodedSentence,
+        words: encodedWords,
+        font: font,
+        fontSize: fontSize,
+        letterSpacing: letterSpacing,
+        interval: interval,
+        width: width,
+        height: height,
+        sentenceColor: sentenceColor,
+        bgColor: bgColor,
+      });
+
+      return `${baseUrl}?${params.toString()}`;
+    }
+
+    // Function to generate Markdown link
+    function generateMarkdownLink(url) {
+      return `![Rotating Text Animation](${url})`;
+    }
+
+    function updatePreview() {
+      const sentenceInput = document.getElementById("sentence").value;
+      const wordsInputs = document.getElementsByName("word[]");
+      const colorsInputs = document.getElementsByName("color[]");
+      const fontInput = document.getElementById("font").value;
+      const fontSizeInput = document.getElementById("fontSize").value;
+      const letterSpacingInput = document.getElementById("letterSpacing").value;
+      const intervalInput = document.getElementById("interval").value;
+      const heightInput = document.getElementById("height").value;
+      const widthInput = document.getElementById("width").value;
+      const sentenceColorInput = document.getElementById(
+        "sentenceColorPicker"
+      ).value;
+      const bgColorInput = document.getElementById("bgColorPicker").value;
+
+      console.log("width on update: ", widthInput);
+      console.log("font on update: ", fontInput);
+
+      if (
+        !wordsInputs ||
+        !colorsInputs ||
+        wordsInputs.length === 0 ||
+        colorsInputs.length === 0
+      ) {
+        console.error("Word or color inputs not found or are empty.");
+        return;
+      }
+
+      const words = [];
+      const colors = [];
+
+      for (let i = 0; i < wordsInputs.length; i++) {
+        if (wordsInputs[i].value && colorsInputs[i].value) {
+          words.push(wordsInputs[i].value);
+          colors.push(colorsInputs[i].value);
+        }
+      }
+
+      // Generate the URL with the current parameters
+      const url = generatePreviewURL(
+        sentenceInput,
+        words,
+        colors,
+        fontInput,
+        fontSizeInput,
+        letterSpacingInput,
+        intervalInput,
+        widthInput,
+        heightInput,
+        sentenceColorInput,
+        bgColorInput
+      );
+
+      // Simulate loading the URL within the preview area
+      loadPreviewFromForm(
+        sentenceInput,
+        words,
+        colors,
+        fontInput,
+        fontSizeInput,
+        letterSpacingInput,
+        intervalInput,
+        widthInput,
+        heightInput,
+        sentenceColorInput,
+        bgColorInput
+      );
+
+      // Update the generated Markdown link
+      const markdownLink = generateMarkdownLink(url);
+      document.getElementById("generated-markdown").value = markdownLink;
+    }
+
+    // Populate words and colors fields
+    // Function to initialize default word and color inputs
+
+    function addWordField(word, color) {
+      const wordsContainer = document.createElement("div");
+      wordsContainer.className = "words-container";
+      wordsContainer.innerHTML = `
+            <label for="word-${
+              document.querySelectorAll(".words-container").length + 1
+            }" class="word-label">Word ${
+        document.querySelectorAll(".words-container").length + 1
+      }: </label>
+            <input type="text" id="word-${
+              document.querySelectorAll(".words-container").length + 1
+            }" name="word[]" class="word-input" value="${word}">
+            <input type="color" id="color-${
+              document.querySelectorAll(".words-container").length + 1
+            }" name="color[]" class="color-input" value="${color}">
+            <button type="button" class="del-button" onclick="removeWord(this)">
+                <i class="fa-solid fa-trash" style="color: #c10606;"></i>
+            </button>
+        `;
+      document
+        .querySelector(".add-button")
+        .insertAdjacentElement("beforebegin", wordsContainer);
+
+      // Add event listeners for the new inputs
+      wordsContainer
+        .querySelector(".word-input")
+        .addEventListener("input", updatePreview);
+      wordsContainer
+        .querySelector(".color-input")
+        .addEventListener("input", updatePreview);
+    }
+    function initializeWordFields() {
+      words.forEach((word, index) => {
+        addWordField(word, colors[index] || "#000000"); // Use default color if not provided
+      });
+      console.log("intializing words");
+    }
+
+    // wordInputs.forEach((input, index) => {
+    //     if (index < words.length) {
+    //         input.value = words[index];
+    //     }
+    // });
+
+    // colorInputs.forEach((input, index) => {
+    //     if (index < colors.length) {
+    //         input.value = colors[index];
+    //     }
+    // });
+
+    // Set default values
+    document.getElementById("font").value = font;
+    document.getElementById("fontSize").value = fontSize;
+    document.getElementById("letterSpacing").value = letterSpacing;
+    document.getElementById("interval").value = interval;
+    document.getElementById("sentenceColorText").value = sentenceColor;
+    document.getElementById("sentenceColorPicker").value = sentenceColor;
+    document.getElementById("bgColorText").value = bgColor;
+    document.getElementById("bgColorPicker").value = bgColor;
+    document.getElementById("height").value = height;
+    document.getElementById("width").value = width;
+
+    // Trigger the update to apply these defaults
+
+    initializeWordFields();
+    updatePreview();
+
     console.log("No params detected. Showing generator form.");
     document.getElementById("generator").style.display = "flex";
     document.getElementById("animation").style.display = "none";
@@ -46,6 +329,8 @@ document.addEventListener("DOMContentLoaded", function () {
     fontSize,
     letterSpacing,
     interval,
+    width,
+    height,
     sentenceColor,
     bgColor,
   ) {
@@ -59,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const previewSentence = document.getElementById("animation-sentence");
     const previewWordsContainer = document.getElementById("animation-words");
 
-    // console.log("fontsize:", fontSize);
+    console.log("width:", width);
 
     // Update the animation sentence
     let parsedFontSize = fontSize.toString() + "px";
@@ -70,9 +355,8 @@ document.addEventListener("DOMContentLoaded", function () {
     previewSentence.style.color = sentenceColor || "#000000";
 
     previewContainerAnimation.style.backgroundColor = bgColor || "transparent";
-    // previewWordsContainer.style.fontFamily = font;
-
-    // console.log("fontsize:", parsedFontSize);
+    previewContainerAnimation.style.height = height? `${height}px`: "auto";
+    previewContainerAnimation.style.width = width ? `${width}px` : "auto";
 
     // Clear the current animation words
     previewWordsContainer.innerHTML = "";
@@ -131,19 +415,19 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
           nextWord.style.opacity = "1";
           Array.from(nextWord.children).forEach((letter, i) => {
-            letter.className = "letter behind"; // Prepare the letters of the next word
+            letter.className = "letter behind";
             setTimeout(() => {
-              letter.className = "letter in"; // Rotate in the letters of the next word
+              letter.className = "letter in";
             }, i * 80);
           });
-        }, interval/8);
+        }, interval ? interval/8 : 500);
 
         currentWordIndex =
           currentWordIndex === maxWordIndex ? 0 : currentWordIndex + 1;
       };
 
-      rotateText(); // Start the initial rotation
-      setInterval(rotateText, interval); //TO UPDATE SPEED TODO
+      rotateText();
+      setInterval(rotateText, interval ? interval : 4000); //use interval if passed
     }
   }
 
@@ -156,7 +440,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .querySelector(".add-button")
       .addEventListener("click", function () {
         wordCount++;
-        addWordField(wordCount);
+        addWordField("", "#FFFFFF");
         updateLabels(); // Update labels after adding a new word
       });
 
@@ -200,189 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
 
-    // Function to add a new word input field dynamically
-    function addWordField(count) {
-      const wordsContainer = document.createElement("div");
-      wordsContainer.className = "words-container";
-      wordsContainer.innerHTML = `
-              <label for="word-${count}" class="word-label">Word ${count}: </label>
-              <input type="text" id="word-${count}" name="word[]" class="word-input">
-              <input type="color" id="color-${count}" name="color[]" class="color-input">
-              <button type="button" class="del-button" onclick="removeWord(this)">
-                  <i class="fa-solid fa-trash" style="color: #c10606;"></i>
-              </button>
-          `;
 
-      // Insert the new word-container before the add button
-      document
-        .querySelector(".add-button")
-        .insertAdjacentElement("beforebegin", wordsContainer);
-
-      // Add event listeners for the new inputs to update the preview dynamically
-      wordsContainer
-        .querySelector(".word-input")
-        .addEventListener("input", updatePreview);
-      wordsContainer
-        .querySelector(".color-input")
-        .addEventListener("input", updatePreview);
-    }
-
-    // Function to update the labels to ensure they are in numeric order
-    function updateLabels() {
-      const wordLabels = document.querySelectorAll(".word-label");
-      wordLabels.forEach((label, index) => {
-        label.textContent = `Word ${index + 1}: `;
-      });
-    }
-
-    // Function to update the preview and simulate URL call
-    function updatePreview() {
-      const sentenceInput = document.getElementById("sentence").value;
-      const wordsInputs = document.getElementsByName("word[]");
-      const colorsInputs = document.getElementsByName("color[]");
-      const fontInput = document.getElementById("font").value;
-      const fontSizeInput = document.getElementById("fontSize").value;
-      const letterSpacingInput = document.getElementById("letterSpacing").value;
-      const intervalInput = document.getElementById("interval").value;
-      const sentenceColorInput = document.getElementById(
-        "sentenceColorPicker"
-      ).value;
-      const bgColorInput = document.getElementById("bgColorPicker").value;
-
-      if (
-        !wordsInputs ||
-        !colorsInputs ||
-        wordsInputs.length === 0 ||
-        colorsInputs.length === 0
-      ) {
-        console.error("Word or color inputs not found or are empty.");
-        return;
-      }
-
-      const words = [];
-      const colors = [];
-
-      for (let i = 0; i < wordsInputs.length; i++) {
-        if (wordsInputs[i].value && colorsInputs[i].value) {
-          words.push(wordsInputs[i].value);
-          colors.push(colorsInputs[i].value);
-        }
-      }
-
-      // Generate the URL with the current parameters
-      const url = generatePreviewURL(
-        sentenceInput,
-        words,
-        colors,
-        fontInput,
-        fontSizeInput,
-        letterSpacingInput,
-        intervalInput,
-        sentenceColorInput,
-        bgColorInput
-      );
-
-      // Simulate loading the URL within the preview area
-      loadPreviewFromForm(
-        sentenceInput,
-        words,
-        colors,
-        fontInput,
-        fontSizeInput,
-        letterSpacingInput,
-        intervalInput,
-        sentenceColorInput,
-        bgColorInput
-      );
-
-      // Update the generated Markdown link
-      const markdownLink = generateMarkdownLink(url);
-      document.getElementById("generated-markdown").value = markdownLink;
-    }
-
-    // Function to load and apply the preview from the form inputs
-    function loadPreviewFromForm(
-      sentence,
-      words,
-      colors,
-      font,
-      fontSize,
-      letterSpacing,
-      interval,
-      sentenceColor,
-      bgColor
-    ) {
-      const previewSentence = document.getElementById("preview-sentence");
-      const previewWordsContainer = document.getElementById("preview-words");
-      const previewContainerPreview = document.getElementById(
-        "preview-container-preview"
-      );
-
-      // Update the preview sentence
-      let parsedFontSize = fontSize.toString() + "px";
-      previewSentence.textContent = sentence;
-      previewSentence.style.fontFamily = font || "inherit";
-      previewSentence.style.fontSize = parsedFontSize || "inherit";
-      previewSentence.style.letterSpacing = letterSpacing || "inherit";
-      previewSentence.style.color = sentenceColor || "#000000";
-      previewContainerPreview.style.backgroundColor = bgColor || "transparent";
-
-      // Clear the current preview words
-      previewWordsContainer.innerHTML = "";
-
-      // Add new words to the preview with animation
-      words.forEach((word, index) => {
-        const span = document.createElement("span");
-        span.style.color = colors[index];
-        span.className = "word";
-        word.split("").forEach((letter) => {
-          const letterSpan = document.createElement("span");
-          letterSpan.textContent = letter;
-          letterSpan.className = "letter";
-          span.appendChild(letterSpan);
-        });
-        previewWordsContainer.appendChild(span);
-      });
-
-      // Apply the animation
-      applyAnimationToWords(previewWordsContainer.querySelectorAll(".word"), interval);
-    }
-
-    // Function to generate the preview URL
-    function generatePreviewURL(
-      sentence,
-      words,
-      colors,
-      font,
-      fontSize,
-      letterSpacing,
-      interval,
-      sentenceColor,
-      bgColor
-    ) {
-      const encodedSentence = encodeURIComponent(sentence);
-      const wordObjects = words.map((word, index) => {
-        return {
-          text: word,
-          color: colors[index] || "#000000", // Default to black if no color is set
-        };
-      });
-      const encodedWords = encodeURIComponent(JSON.stringify(wordObjects));
-      const baseUrl = window.location.origin + window.location.pathname;
-
-      const params = new URLSearchParams({
-        sentence: encodedSentence,
-        words: encodedWords,
-        font: font,
-        fontSize: fontSize,
-        letterSpacing: letterSpacing,
-        interval: interval,
-        sentenceColor: sentenceColor,
-        bgColor: bgColor,
-      });
-
-      return `${baseUrl}?${params.toString()}`;
-    }
 
     // Function to generate Markdown link
     function generateMarkdownLink(url) {
@@ -411,12 +513,24 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("interval")
     .addEventListener("input", updatePreview);
     document
+        .getElementById("width")
+        .addEventListener("input", updatePreview);
+    document
+        .getElementById("height")
+        .addEventListener("input", updatePreview);
+    document
       .getElementById("sentenceColorPicker")
       .addEventListener("input", updatePreview);
     document
+    .getElementById("sentenceColorText")
+    .addEventListener("input", updatePreview);
+    document
       .getElementById("bgColorPicker")
       .addEventListener("input", updatePreview);
-
+    document
+    .getElementById("bgColorText")
+    .addEventListener("input", updatePreview);
+    
     const sentenceColorPicker = document.getElementById("sentenceColorPicker");
     const sentenceColorText = document.getElementById("sentenceColorText");
 
@@ -449,19 +563,19 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Optional: Ensure valid input and format hex code correctly
-    colorText.addEventListener("blur", function () {
-      let color = colorText.value;
-      if (!color.startsWith("#")) {
-        color = "#" + color;
-      }
-      if (color.length === 4 || color.length === 7) {
-        colorText.value = color.toUpperCase();
-      } else {
-        // Reset to default if the input is invalid
-        colorText.value = colorPicker.value.toUpperCase();
-      }
-    });
+    // // Optional: Ensure valid input and format hex code correctly
+    // colorText.addEventListener("blur", function () {
+    //   let color = colorText.value;
+    //   if (!color.startsWith("#")) {
+    //     color = "#" + color;
+    //   }
+    //   if (color.length === 4 || color.length === 7) {
+    //     colorText.value = color.toUpperCase();
+    //   } else {
+    //     // Reset to default if the input is invalid
+    //     colorText.value = colorPicker.value.toUpperCase();
+    //   }
+    // });
 
     updatePreview(); // Initial preview generation
   }

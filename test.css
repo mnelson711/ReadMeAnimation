@@ -121,12 +121,13 @@ hr.solid {
 .form-group {
     display: flex;
     align-items: center;
+    /* background-color: aqua; */
 }
 
 .form-group label {
     min-width: 150px;
     /* Set a fixed or minimum width for the labels */
-    margin-right: 10px;
+    /* margin-right: 10px; */
     /* Space between the label and input */
     text-align: left;
     /* Align the label text to the right */
@@ -139,7 +140,19 @@ hr.solid {
     border-radius: 5px;
     outline: none;
     margin-left: 1%;
-    /* width: 30%; */
+    width: 30%;
+    /* background-color: blue; */
+    /* Allow the input to take up the remaining space */
+}
+
+#height, #width {
+    /* flex: 1; */
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    outline: none;
+    margin-left: 1%;
+    width: 12%;
     /* Allow the input to take up the remaining space */
 }
 
@@ -215,6 +228,7 @@ hr.solid {
     align-items: center;
     justify-content: center;
     height: 100px;
+    overflow: hidden;
     /* background-color: #bbb; */
 }
 
@@ -224,6 +238,7 @@ hr.solid {
     align-items: center;
     justify-content: center;
     height: 100px;
+    overflow: hidden;
     /* background-color: #bbb; */
 }
 
